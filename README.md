@@ -16,8 +16,7 @@ Add `orno/route` to your `composer.json`.
 {
     "require": {
         "orno/route": "1.*"
-    },
-    "minimum-stability": "dev"
+    }
 }
 ```
 
