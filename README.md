@@ -434,7 +434,7 @@ $router->setStrategy(new CustomStrategy);
 
 Now when the route is dispatched, the `dispatch` method of the custom strategy will be invoked and passed arguments needed to invoke a controller.
 
-The `$controller` argument will be one of three types, `string` (points to a named function), `array` (points to a class method [0 => 'ClassName', 1 => 'methodName']) or `\Closure` (is an anonymous function), and the `$vars` argument is an associative array of wildcard segments from the matched route `['wildcard' => 'actual_value']`.
+The `$controller` argument will be one of three types, `string` (points to a named function), `array` (points to a class method `[0 => 'ClassName', 1 => 'methodName']`) or `\Closure` (is an anonymous function), and the `$vars` argument is an associative array of wildcard segments from the matched route `['wildcard' => 'actual_value']`.
 
 The return of your dispatch method will bubble out and be returned by `Orno\Route\Dispatcher::dispatch`, it does not require a return value, however, you should be aware that there is no output buffering within the dispatch process by default.
 
