@@ -104,6 +104,19 @@ class RouteCollectionTest extends \PHPUnit_Framework_Testcase
     }
 
     /**
+     * Asserts that an exception is thrown when an incorrect strategy type is provided
+     *
+     * @return void
+     */
+    public function testExceptionIsThrownWhenWrongStrategyTypeProvided()
+    {
+        $this->setExpectedException('InvalidArgumentException');
+
+        $router = new RouteCollection;
+        $router->setStrategy('hello');
+    }
+
+    /**
      * Asserts that `getDispatcher` method returns correct instance
      *
      * @return void

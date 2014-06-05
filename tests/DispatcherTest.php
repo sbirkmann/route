@@ -334,4 +334,28 @@ class DispatcherTest extends \PHPUnit_Framework_Testcase
 
         $response = $dispatcher->dispatch('GET', '/route');
     }
+
+    /**
+     * Asserts that a custom strategy is dispatched correctly and the return of that
+     * method bubbles out to the dispatcher
+     *
+     * @return void
+     */
+    public function testCustomStrategyIsDispatchedCorrectly()
+    {
+        $mockStrategy = $this->getMock('Orno\Route\CustomStrategyInterface');
+        $mockStrategy->expects($this->once())
+                     ->method('dispatch')
+                     ->with($this->equalTo(['Controller', 'method']), $this->equalTo(['id' => 2, 'name' => 'phil']))
+                     ->will($this->returnValue(['id' => 2, 'name' => 'phil']));
+
+        $collection = new Route\RouteCollection;
+        $collection->get('/route/{id}/{name}', 'Controller::method', $mockStrategy);
+
+        $dispatcher = $collection->getDispatcher();
+
+        $response = $dispatcher->dispatch('GET', '/route/2/phil');
+
+        $this->assertSame(['id' => 2, 'name' => 'phil'], $response);
+    }
 }

@@ -70,14 +70,16 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyInter
     /**
      * Handle dispatching of a found route
      *
-     * @param  string|\Closure $handler
-     * @param  integer         $strategy
-     * @param  array           $vars
+     * @param  string|\Closure                             $handler
+     * @param  integer|\Orno\Route\CustomStrategyInterface $strategy
+     * @param  array                                       $vars
      * @return \Orno\Http\ResponseInterface
      */
     protected function handleFound($handler, $strategy, array $vars)
     {
-        $strategy = (is_null($this->strategy)) ? $strategy : $this->strategy;
+        if (is_null($this->getStrategy())) {
+            $this->setStrategy($strategy);
+        }
 
         // figure out what the controller is
         if (($handler instanceof \Closure) || (is_string($handler) && is_callable($handler))) {
@@ -89,19 +91,24 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyInter
         }
 
         // handle getting of response based on strategy
-        switch ($strategy) {
-            case RouteStrategyInterface::REQUEST_RESPONSE_STRATEGY:
-                $response = $this->handleRequestResponseStrategy($controller, $vars);
-                break;
-            case RouteStrategyInterface::RESTFUL_STRATEGY:
-                $response = $this->handleRestfulStrategy($controller, $vars);
-                break;
-            case RouteStrategyInterface::URI_STRATEGY:
-                $response = $this->handleUriStrategy($controller, $vars);
-                break;
+        if (is_integer($strategy)) {
+            switch ($strategy) {
+                case RouteStrategyInterface::REQUEST_RESPONSE_STRATEGY:
+                    $response = $this->handleRequestResponseStrategy($controller, $vars);
+                    break;
+                case RouteStrategyInterface::RESTFUL_STRATEGY:
+                    $response = $this->handleRestfulStrategy($controller, $vars);
+                    break;
+                case RouteStrategyInterface::URI_STRATEGY:
+                    $response = $this->handleUriStrategy($controller, $vars);
+                    break;
+            }
+
+            return $response;
         }
 
-        return $response;
+        // we must be using a custom strategy
+        return $strategy->dispatch($controller, $vars);
     }
 
     /**

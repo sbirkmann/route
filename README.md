@@ -42,10 +42,11 @@ include 'vendor/autoload.php';
     - [Request -> Response Strategy](#request---response-strategy)
     - [URI Strategy](#uri-strategy)
     - [RESTful Strategy](#restful-strategy)
-        - [Pre-built JSON Resopnses](#pre-built-json-responses)
+        - [Pre-built JSON Responses](#pre-built-json-responses)
             - [Available JSON Responses](#available-json-responses)
         - [HTTP 4xx Exceptions](#http-4xx-exceptions)
             - [Available HTTP Exceptions](#available-http-exceptions)
+    - [Custom Strategies](#custom-strategies)
 - [Considerations](#considerations)
 
 ### Basic Usage
@@ -325,7 +326,7 @@ $route->get('/acme/{id}', function (Request $request, array $args) {
 
 The problem with returning an array is that you are always assuming a `200 OK` HTTP response code.
 
-#### Pre-built JSON Resopnses
+#### Pre-built JSON Responses
 
 [Orno\Http](https://github.com/orno/http) provides several pre-built JSON `Response` objects that are pre-configured and will handle the response for you.
 
@@ -404,6 +405,38 @@ If the exception is thrown, a request with the correct response code and headers
 | 418         | `Orno\Http\Exception\ImATeapotException`            | [I'm a teapot](http://en.wikipedia.org/wiki/April_Fools%27_Day_RFC).                                                                                                                                         |
 | 428         | `Orno\Http\Exception\PreconditionRequiredException` | The origin server requires the request to be conditional.                                                                                                                                                    |
 | 429         | `Orno\Http\Exception\TooManyRequestsException`      | The user has sent too many requests in a given amount of time.                                                                                                                                               |
+
+#### Custom Strategies
+
+The route allows you to define a custom dispatch strategy by implementing `Orno\Route\CustomStrategyInterface`.
+
+```php
+<?php
+
+namespace Acme\Strategy;
+
+class CustomStrategy implements CustomStrategyInterface
+{
+    public function dispatch($controller, array $vars)
+    {
+        // ... handle the dispatch of the controller yourself
+    }
+}
+```
+
+```php
+use Orno\Route\RouteStrategyInterface;
+use Acme\Strategy\CustomStrategy;
+
+$router = new Orno\Route\RouteCollection;
+$router->setStrategy(new CustomStrategy);
+```
+
+Now when the route is dispatched, the `dispatch` method of the custom strategy will be invoked and passed arguments needed to invoke a controller.
+
+The `$controller` argument will be one of three types, `string` (points to a named function), `array` (points to a class method [0 => 'ClassName', 1 => 'methodName']) or `\Closure` (is an anonymous function), and the `$vars` argument is an associative array of wildcard segments from the matched route `['wildcard' => 'actual_value']`.
+
+The return of your dispatch method will bubble out and be returned by `Orno\Route\Dispatcher::dispatch`, it does not require a return value, however, you should be aware that there is no output buffering within the dispatch process by default.
 
 ### Considerations
 

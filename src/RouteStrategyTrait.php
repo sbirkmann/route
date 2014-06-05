@@ -18,12 +18,20 @@ trait RouteStrategyTrait
      * Tells the implementor which strategy to use, this should override any higher
      * level setting of strategies, such as on specific routes
      *
-     * @param  integer $strategy
+     * @param  integer|\Orno\Route\CustomStrategyInterface $strategy
      * @return void
      */
     public function setStrategy($strategy)
     {
-        $this->strategy = (integer) $strategy;
+        if (is_integer($strategy) || $strategy instanceof CustomStrategyInterface) {
+            $this->strategy = $strategy;
+
+            return $this;
+        }
+
+        throw new \InvalidArgumentException(
+            'Provided strategy must be an integer or an instance of [\Orno\Route\CustomStrategyInterface]'
+        );
     }
 
     /**

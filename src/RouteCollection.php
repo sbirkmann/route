@@ -94,19 +94,6 @@ class RouteCollection extends RouteCollector implements RouteStrategyInterface
     }
 
     /**
-     * Sets the strategy to be used by the entire collection
-     *
-     * @param  integer $strategy
-     * @return \Orno\Route\RouteCollection
-     */
-    public function setStrategy($strategy)
-    {
-        $this->strategy = $strategy;
-
-        return $this;
-    }
-
-    /**
      * Builds a dispatcher based on the routes attached to this collection
      *
      * @return \Orno\Route\Dispatcher
