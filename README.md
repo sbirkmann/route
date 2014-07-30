@@ -1,10 +1,11 @@
 # Orno\Route
 
-[![Build Status](https://travis-ci.org/orno/route.png?branch=master)](https://travis-ci.org/orno/route)
-[![Code Coverage](https://scrutinizer-ci.com/g/orno/route/badges/coverage.png?s=79362898649cdc823bebfc309db57306debb3673)](https://scrutinizer-ci.com/g/orno/route/)
-[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/orno/route/badges/quality-score.png?s=a11cf213102e6a0c37b81ce60401ecf2a9555a51)](https://scrutinizer-ci.com/g/orno/route/)
-[![Latest Stable Version](https://poser.pugx.org/orno/route/v/stable.png)](https://packagist.org/packages/orno/route)
-[![Total Downloads](https://poser.pugx.org/orno/route/downloads.png)](https://packagist.org/packages/orno/route)
+[![Latest Version](https://img.shields.io/github/release/orno/route.svg?style=flat)](https://github.com/orno/route/releases)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](LICENSE.md)
+[![Build Status](https://img.shields.io/travis/orno/route/master.svg?style=flat)](https://travis-ci.org/orno/route)
+[![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/orno/route.svg?style=flat)](https://scrutinizer-ci.com/g/orno/route/code-structure)
+[![Quality Score](https://img.shields.io/scrutinizer/g/orno/route.svg?style=flat)](https://scrutinizer-ci.com/g/orno/route)
+[![Total Downloads](https://img.shields.io/packagist/dt/orno/route.svg?style=flat)](https://packagist.org/packages/orno/route)
 
 Orno\Route is a fast routing/dispatcher package enabling you to build well designed performant web apps. At it's core is Nikita Popov's [FastRoute](https://github.com/nikic/FastRoute) package allowing this package to concentrate on the dispatch of your controllers.
 
