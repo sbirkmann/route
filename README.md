@@ -1,6 +1,6 @@
 # Orno\Route
 
-[![Latest Version](https://img.shields.io/github/release/orno/route.svg?style=flat)](https://github.com/orno/route/releases)
+[![Latest Version](http://img.shields.io/packagist/v/orno/route.svg?style=flat)](https://packagist.org/packages/orno/route)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](LICENSE.md)
 [![Build Status](https://img.shields.io/travis/orno/route/master.svg?style=flat)](https://travis-ci.org/orno/route)
 [![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/orno/route.svg?style=flat)](https://scrutinizer-ci.com/g/orno/route/code-structure)
