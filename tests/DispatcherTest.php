@@ -148,7 +148,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
      */
     public function testClassBasedControllerRouteThrowsExceptionWhenNoFunctionPresent()
     {
-        $this->setExpectedException('RuntimeException', 'You must specify a controller action. ControllerName::controllerAction');
+        $this->setExpectedException('RuntimeException', 'A class method must be provided as a controller. ClassName::methodName');
 
         $container = $this->getMock('Orno\Di\Container');
 
