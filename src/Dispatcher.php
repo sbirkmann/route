@@ -81,7 +81,7 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyInter
             $this->setStrategy($strategy);
         }
 
-        $controller = NULL;
+        $controller = null;
 
         // figure out what the controller is
         if (($handler instanceof \Closure) || (is_string($handler) && is_callable($handler))) {
@@ -93,8 +93,8 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyInter
         }
 
         // if controller method wasn't specified, throw exception.
-        if (!$controller){
-            throw new \RuntimeException('You must specify a controller action. ControllerName::controllerAction');
+        if (! $controller){
+            throw new \RuntimeException('A class method must be provided as a controller. ClassName::methodName');
         }
 
         // handle getting of response based on strategy
