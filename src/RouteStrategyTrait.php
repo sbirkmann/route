@@ -19,14 +19,14 @@ trait RouteStrategyTrait
      * level setting of strategies, such as on specific routes
      *
      * @param  integer|\Orno\Route\CustomStrategyInterface $strategy
-     * @return \Orno\Route\RouteStrategyTrait
+     * @return void
      */
     public function setStrategy($strategy)
     {
         if (is_integer($strategy) || $strategy instanceof CustomStrategyInterface) {
             $this->strategy = $strategy;
 
-            return $this;
+            return null;
         }
 
         throw new \InvalidArgumentException(
