@@ -141,6 +141,25 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $response = $dispatcher->dispatch('GET', '/route/2/phil');
         $this->assertEquals('hello world', $response->getContent());
     }
+    /**
+     * Assert that an exception is thrown when no controller method is specified
+     *
+     * @return void
+     */
+    public function testClassBasedControllerRouteThrowsExceptionWhenNoFunctionPresent()
+    {
+        $this->setExpectedException('RuntimeException', 'You must specify a controller action. ControllerName::controllerAction');
+
+        $container = $this->getMock('Orno\Di\Container');
+
+        $collection = new Route\RouteCollection($container);
+        $collection->setStrategy(Route\RouteStrategyInterface::URI_STRATEGY);
+        $collection->get('/route/', 'SomeClass');
+
+        $dispatcher = $collection->getDispatcher();
+
+        $response = $dispatcher->dispatch('GET', '/route/');
+    }
 
     /**
      * Assert that a route using the URI Strategy gets passed the correct arguments

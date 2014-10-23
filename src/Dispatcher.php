@@ -14,7 +14,6 @@ use Orno\Http\Exception as HttpException;
 use Orno\Http\JsonResponse;
 use Orno\Http\Response;
 use Orno\Http\ResponseInterface;
-use Orno\Route\RouteCollection;
 
 class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyInterface
 {
@@ -85,12 +84,15 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyInter
      * @param  integer|\Orno\Route\CustomStrategyInterface $strategy
      * @param  array                                       $vars
      * @return \Orno\Http\ResponseInterface
+     * @throws RuntimeException
      */
     protected function handleFound($handler, $strategy, array $vars)
     {
         if (is_null($this->getStrategy())) {
             $this->setStrategy($strategy);
         }
+
+        $controller = null;
 
         // figure out what the controller is
         if (($handler instanceof \Closure) || (is_string($handler) && is_callable($handler))) {
@@ -99,6 +101,11 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyInter
 
         if (is_string($handler) && strpos($handler, '::') !== false) {
             $controller = explode('::', $handler);
+        }
+
+        // if controller method wasn't specified, throw exception.
+        if (! $controller){
+            throw new \RuntimeException('A class method must be provided as a controller. ClassName::methodName');
         }
 
         // handle getting of response based on strategy
