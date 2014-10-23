@@ -9,7 +9,7 @@ namespace OrnoTest\Route;
 
 use Orno\Route\RouteCollection;
 
-class RouteCollectionTest extends \PHPUnit_Framework_Testcase
+class RouteCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Asserts that routes are set via convenience methods

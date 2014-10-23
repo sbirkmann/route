@@ -13,7 +13,7 @@ use Orno\Http\Response;
 use Orno\Http\JsonResponse;
 use Orno\Route;
 
-class DispatcherTest extends \PHPUnit_Framework_Testcase
+class DispatcherTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Assert that a route using the Restful Strategy returns a json response
