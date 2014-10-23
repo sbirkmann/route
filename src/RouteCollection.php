@@ -29,7 +29,7 @@ class RouteCollection extends RouteCollector implements RouteStrategyInterface
     protected $container;
 
     /**
-     * @var \Orno\Config\Repository
+     * @var \Orno\Config\Repository|array
      */
     protected $config;
 

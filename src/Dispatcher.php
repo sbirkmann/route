@@ -24,6 +24,16 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyInter
     use RouteStrategyTrait;
 
     /**
+     * @var \Orno\Di\ContainerInterface
+     */
+    protected $container;
+
+    /**
+     * @var array
+     */
+    protected $routes;
+
+    /**
      * Constructor
      *
      * @param array $routes
@@ -53,13 +63,14 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyInter
                 $response = $this->handleNotFound();
                 break;
             case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
-                $allowed  = $match[1];
+                $allowed  = (array) $match[1];
                 $response = $this->handleNotAllowed($allowed);
                 break;
             case FastRoute\Dispatcher::FOUND:
+            default:
                 $handler  = (isset($this->routes[$match[1]]['callback'])) ? $this->routes[$match[1]]['callback'] : $match[1];
                 $strategy = $this->routes[$match[1]]['strategy'];
-                $vars     = $match[2];
+                $vars     = (array) $match[2];
                 $response = $this->handleFound($handler, $strategy, $vars);
                 break;
         }
@@ -93,14 +104,15 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyInter
         // handle getting of response based on strategy
         if (is_integer($strategy)) {
             switch ($strategy) {
-                case RouteStrategyInterface::REQUEST_RESPONSE_STRATEGY:
-                    $response = $this->handleRequestResponseStrategy($controller, $vars);
+                case RouteStrategyInterface::URI_STRATEGY:
+                    $response = $this->handleUriStrategy($controller, $vars);
                     break;
                 case RouteStrategyInterface::RESTFUL_STRATEGY:
                     $response = $this->handleRestfulStrategy($controller, $vars);
                     break;
-                case RouteStrategyInterface::URI_STRATEGY:
-                    $response = $this->handleUriStrategy($controller, $vars);
+                case RouteStrategyInterface::REQUEST_RESPONSE_STRATEGY:
+                default:
+                    $response = $this->handleRequestResponseStrategy($controller, $vars);
                     break;
             }
 

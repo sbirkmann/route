@@ -10,7 +10,7 @@ namespace Orno\Route;
 trait RouteStrategyTrait
 {
     /**
-     * @var integer
+     * @var \Orno\Route\CustomStrategyInterface|integer
      */
     protected $strategy;
 
@@ -19,7 +19,7 @@ trait RouteStrategyTrait
      * level setting of strategies, such as on specific routes
      *
      * @param  integer|\Orno\Route\CustomStrategyInterface $strategy
-     * @return void
+     * @return \Orno\Route\RouteStrategyTrait
      */
     public function setStrategy($strategy)
     {
