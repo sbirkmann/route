@@ -111,6 +111,9 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyInter
         // handle getting of response based on strategy
         if (is_integer($strategy)) {
             switch ($strategy) {
+                case RouteStrategyInterface::METHOD_ARGUMENT_STRATEGY:
+                    $response = $this->handleMethodArgumentStrategy($controller, $vars);
+                    break;
                 case RouteStrategyInterface::URI_STRATEGY:
                     $response = $this->handleUriStrategy($controller, $vars);
                     break;
@@ -121,7 +124,9 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyInter
                 default:
                     $response = $this->handleRequestResponseStrategy($controller, $vars);
                     break;
+            // @codeCoverageIgnoreStart
             }
+            // @codeCoverageIgnoreEnd
 
             return $response;
         }
@@ -133,8 +138,8 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyInter
     /**
      * Invoke a controller action
      *
-     * @param  string|\Closure $controller
-     * @param  array           $vars
+     * @param  string|array|\Closure $controller
+     * @param  array                 $vars
      * @return \Orno\Http\ResponseInterface
      */
     public function invokeController($controller, array $vars = [])
@@ -152,8 +157,8 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyInter
     /**
      * Handles response to Request -> Response Strategy based routes
      *
-     * @param  string|\Closure $controller
-     * @param  array           $vars
+     * @param  string|array|\Closure $controller
+     * @param  array                 $vars
      * @return \Orno\Http\ResponseInterface
      */
     protected function handleRequestResponseStrategy($controller, array $vars = [])
@@ -176,8 +181,8 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyInter
     /**
      * Handles response to Restful Strategy based routes
      *
-     * @param  string|\Closure $controller
-     * @param  array           $vars
+     * @param  string|array|\Closure $controller
+     * @param  array                 $vars
      * @return \Orno\Http\ResponseInterface
      */
     protected function handleRestfulStrategy($controller, array $vars = [])
@@ -208,14 +213,46 @@ class Dispatcher extends GroupCountBasedDispatcher implements RouteStrategyInter
     /**
      * Handles response to URI Strategy based routes
      *
-     * @param  string|\Closure $controller
-     * @param  array           $vars
+     * @param  string|array|\Closure $controller
+     * @param  array                 $vars
      * @return \Orno\Http\ResponseInterface
      */
     protected function handleUriStrategy($controller, array $vars)
     {
         $response = $this->invokeController($controller, $vars);
 
+        return $this->determineResponse($response);
+    }
+
+    /**
+     * Handles response to Method Argument Strategy
+     *
+     * @param  string|array|\Closure $controller
+     * @param  array                 $vars
+     * @return \Orno\Http\ResponseInterface
+     */
+    protected function handleMethodArgumentStrategy($controller, array $vars)
+    {
+        if (is_array($controller)) {
+            $controller = [
+                $this->container->get($controller[0]),
+                $controller[1]
+            ];
+        }
+
+        $response = $this->container->call($controller);
+
+        return $this->determineResponse($response);
+    }
+
+    /**
+     * Attempt to build a response
+     *
+     * @param  mixed $response
+     * @return \Orno\Http\ResponseInterface
+     */
+    protected function determineResponse($response)
+    {
         if ($response instanceof ResponseInterface) {
             return $response;
         }

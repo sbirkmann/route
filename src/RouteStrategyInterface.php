@@ -15,6 +15,7 @@ interface RouteStrategyInterface
     const REQUEST_RESPONSE_STRATEGY = 0;
     const RESTFUL_STRATEGY          = 1;
     const URI_STRATEGY              = 2;
+    const METHOD_ARGUMENT_STRATEGY  = 3;
 
     /**
      * Tells the implementor which strategy to use, this should override any higher

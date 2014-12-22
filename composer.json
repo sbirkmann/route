@@ -5,7 +5,7 @@
     "license": "MIT",
     "require": {
         "php": ">=5.4",
-        "orno/di": "~2.1",
+        "orno/di": "~2.3",
         "orno/http": "~1.0",
         "nikic/fast-route": "~0.2"
     },

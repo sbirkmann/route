@@ -42,6 +42,7 @@ include 'vendor/autoload.php';
 - [Strategies](#strategies)
     - [Request -> Response Strategy](#request---response-strategy)
     - [URI Strategy](#uri-strategy)
+    - [Method Argument Strategy](#method-argument-strategy)
     - [RESTful Strategy](#restful-strategy)
         - [Pre-built JSON Responses](#pre-built-json-responses)
             - [Available JSON Responses](#available-json-responses)
@@ -236,6 +237,7 @@ Route strategies are a way of encouraging good design based on the type of appli
 - `Orno\Route\RouteStrategyInterface::REQUEST_RESPONSE_STRATEGY`
 - `Orno\Route\RouteStrategyInterface::RESTFUL_STRATEGY`
 - `Orno\Route\RouteStrategyInterface::URI_STRATEGY`
+- `Orno\Route\RouteStrategyInterface::METHOD_ARGUMENT_STRATEGY`
 
 Strategies can be set individually per route by passing in one of the above constants as the last argument of your route definition.
 
@@ -298,6 +300,22 @@ $route->get('/hello/{name1}/{name2}', function ($name1, $name2) {
     return '<h1>Hello ' . $name1 . ' and ' . $name2 . '</h1>';
 });
 ```
+
+#### Method Argument Strategy
+
+The Method Argument Strategy allows you to have your controller dependencies injected directly as arguments.
+
+```php
+$route->get('/some-route', function (SomeDependency $SomeDependency, SomeOtherDependency $someOtherDependency) {
+    // ...
+});
+```
+
+The router will interact the [Orno\Di](https://github.com/orno/di), if the controller is a class method, it will check for a definition within the container, if there is no definition or the controller is some other type of `callable`, will attempt to automatically resolve the dependencies.
+
+The response is handled in the same way as the [URI Strategy](#uri-strategy).
+
+For details on how to define dependencies for your controller, please see the [documentation](https://github.com/orno/di#registering-callablesinvokables) for Orno\Di.
 
 #### RESTful Strategy
 

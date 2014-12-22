@@ -141,6 +141,7 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $response = $dispatcher->dispatch('GET', '/route/2/phil');
         $this->assertEquals('hello world', $response->getContent());
     }
+
     /**
      * Assert that an exception is thrown when no controller method is specified
      *
@@ -227,6 +228,58 @@ class DispatcherTest extends \PHPUnit_Framework_TestCase
         $dispatcher = $collection->getDispatcher();
 
         $response = $dispatcher->dispatch('GET', '/route/2/phil');
+    }
+
+    /**
+     * Assert that a route using the Method Argument Strategy throws exception when Response
+     * cannot be built
+     *
+     * @return void
+     */
+    public function testMethodArgumentStrategyRouteThrowsExceptionWhenResponseCannotBeBuilt()
+    {
+        $this->setExpectedException('RuntimeException', 'Unable to build Response from controller return value');
+
+        $collection = new Route\RouteCollection;
+        $collection->setStrategy(Route\RouteStrategyInterface::METHOD_ARGUMENT_STRATEGY);
+        $collection->get('/route', function () {
+
+            return new \stdClass;
+        });
+
+        $dispatcher = $collection->getDispatcher();
+
+        $response = $dispatcher->dispatch('GET', '/route');
+    }
+
+    /**
+     * Asserts that the correct method is invoked on a class based controller
+     *
+     * @return void
+     */
+    public function testClassBasedControllerInvokesCorrectMethodOnMethodArgumentStrategy()
+    {
+        $controller = $this->getMock('SomeClass', ['someMethod']);
+
+        $container = $this->getMock('Orno\Di\Container');
+        $container->expects($this->once())
+                  ->method('get')
+                  ->with($this->equalTo('SomeClass'))
+                  ->will($this->returnValue($controller));
+
+        $container->expects($this->once())
+                  ->method('call')
+                  ->with($this->equalTo([$controller, 'someMethod']))
+                  ->will($this->returnValue('hello world'));
+
+        $collection = new Route\RouteCollection($container);
+        $collection->setStrategy(Route\RouteStrategyInterface::METHOD_ARGUMENT_STRATEGY);
+        $collection->get('/route', 'SomeClass::someMethod');
+
+        $dispatcher = $collection->getDispatcher();
+
+        $response = $dispatcher->dispatch('GET', '/route');
+        $this->assertEquals('hello world', $response->getContent());
     }
 
     /**
