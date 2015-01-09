@@ -26,8 +26,7 @@
     },
     "autoload": {
         "psr-4": {
-            "League\\Route\\": "src",
-            "League\\Dic\\": "../dic/src"
+            "League\\Route\\": "src"
         }
     },
     "autoload-dev": {
